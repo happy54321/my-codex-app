@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<title>IG 貼文生成器</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IG 貼文生成器</title>
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      margin: 2rem;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    @media (min-width: 600px) {
+      body {
+        width: 600px;
+        margin: 2rem auto;
+      }
+    }
+  </style>
 </head>
 <body>
 <h1>IG 貼文生成器</h1>
-<div>
+<div class="field">
   <label for="topic">貼文主題：</label>
   <input type="text" id="topic" />
 </div>
-<div>
+<div class="field">
   <label for="style">風格：</label>
   <select id="style">
     <option value="活潑">活潑</option>
@@ -22,8 +55,10 @@
 <button id="generate">產生</button>
 <h2>標題建議</h2>
 <ul id="titles"></ul>
+<button id="copy-titles">複製標題</button>
 <h2>Hashtags</h2>
 <ul id="hashtags"></ul>
+<button id="copy-hashtags">複製 Hashtag</button>
 <script>
 async function generate() {
   const topic = document.getElementById('topic').value;
@@ -46,7 +81,16 @@ async function generate() {
   });
 }
 
+function copyList(id) {
+  const text = Array.from(document.querySelectorAll(`#${id} li`))
+    .map(li => li.textContent)
+    .join('\n');
+  navigator.clipboard.writeText(text).then(() => alert('已複製'));
+}
+
 document.getElementById('generate').addEventListener('click', generate);
+document.getElementById('copy-titles').addEventListener('click', () => copyList('titles'));
+document.getElementById('copy-hashtags').addEventListener('click', () => copyList('hashtags'));
 </script>
 </body>
 </html>
