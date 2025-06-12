@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>IG 貼文生成器</title>
+</head>
+<body>
+<h1>IG 貼文生成器</h1>
+<div>
+  <label for="topic">貼文主題：</label>
+  <input type="text" id="topic" />
+</div>
+<div>
+  <label for="style">風格：</label>
+  <select id="style">
+    <option value="活潑">活潑</option>
+    <option value="懷舊">懷舊</option>
+    <option value="勵志">勵志</option>
+    <option value="情緒化">情緒化</option>
+  </select>
+</div>
+<button id="generate">產生</button>
+<h2>標題建議</h2>
+<ul id="titles"></ul>
+<h2>Hashtags</h2>
+<ul id="hashtags"></ul>
+<script>
+async function generate() {
+  const topic = document.getElementById('topic').value;
+  const style = document.getElementById('style').value;
+  const response = await fetch(`/generate?topic=${encodeURIComponent(topic)}&style=${encodeURIComponent(style)}`);
+  const data = await response.json();
+  const titlesElem = document.getElementById('titles');
+  titlesElem.innerHTML = '';
+  data.titles.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    titlesElem.appendChild(li);
+  });
+  const hashtagsElem = document.getElementById('hashtags');
+  hashtagsElem.innerHTML = '';
+  data.hashtags.forEach(h => {
+    const li = document.createElement('li');
+    li.textContent = h;
+    hashtagsElem.appendChild(li);
+  });
+}
+
+document.getElementById('generate').addEventListener('click', generate);
+</script>
+</body>
+</html>
